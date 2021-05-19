@@ -4,7 +4,8 @@
       My personal costs
     </header>
     <main>
-      <PaymentForm />
+      <ButtonAdd @show="onShowForm"/>
+      <PaymentForm v-if="show" @add='onDataAdded'/>
       <PaymentsList :items="paymentsList" />
     </main>
   </div>
@@ -13,14 +14,17 @@
 <script>
 import PaymentsList from './components/PaymentsList'
 import PaymentForm from './components/PaymentForm'
+import ButtonAdd from './components/ButtonAdd'
 export default {
   name: 'App',
   components: {
     PaymentsList,
-    PaymentForm
+    PaymentForm,
+    ButtonAdd
   },
   data () {
     return {
+      show: false,
       paymentsList: [
         {
           date: '13.05.2021',
@@ -48,6 +52,10 @@ export default {
   methods: {
     onDataAdded (data) {
       this.paymentsList.push(data)
+      this.show = false
+    },
+    onShowForm () {
+      this.show = !this.show
     }
   }
 }

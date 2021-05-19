@@ -1,7 +1,16 @@
 <template>
   <div>
     <input placeholder="Date" v-model="date" />
-    <input placeholder="Category" v-model="category" />
+    <select v-model="category">
+          <option value="" disabled selected>Category</option>
+          <option
+            v-for="(category, index) in categories"
+            :key="index"
+            :value="category"
+          >
+            {{ category }}
+          </option>
+        </select>
     <input placeholder="Price" v-model.number="price" />
     <button @click="save">Save</button>
   </div>
@@ -13,7 +22,8 @@ export default {
     return {
       date: '',
       category: '',
-      price: 0
+      price: 0,
+      categories: ['Education', 'Clothes', 'Food', 'Entertainment', 'Transport', 'Trips', 'Others']
     }
   },
   props: {
