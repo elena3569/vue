@@ -8,50 +8,56 @@
     </div>
     <hr>
      <div :class='[$style.costs__content]' v-for="(item, index) in curItems" :key="index">
-      <div :class='[$style.costs__number]'>{{(index + 1) + (curPage - 1) * itemsQuantity}}</div>
+      <div :class='[$style.costs__number]'>{{item.id}}</div>
       <div :class='[$style.costs__date]'> {{ item.date }} </div>
       <div :class='[$style.costs__category]'> {{ item.category }} </div>
-      <div :class='[$style.costs__price]'> {{ item.price }} </div>
+      <div :class='[$style.costs__price]'> {{ item.value }} </div>
     </div>
     <div :class="[$style.pagination]">
-      <button @click='changePage(-1)'  :class="[$style.pagination__btn]">&#60;</button>
-      <button @click="curPage=index"
+      <button @click='changePageArrow(-1)'  :class="[$style.pagination__btn]">&#60;</button>
+      <button @click="changePage(index)"
           v-for='(index) in pagesQuantity'
           :key='index'
           :class="[$style.pagination__btn]"
       >{{index}}</button>
-      <button @click='changePage(1)' :class="[$style.pagination__btn]">&#62;</button>
+      <button @click='changePageArrow(1)' :class="[$style.pagination__btn]">&#62;</button>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters, mapMutations } from 'vuex'
+
 export default {
-  data () {
-    return {
-      curPage: 1,
-      itemsQuantity: 3
-    }
-  },
-  props: {
-    items: Array
-  },
   methods: {
-    changePage (dif) {
-      this.curPage += dif
+    ...mapMutations(['SET_CUR_PAGE']),
+    ...mapActions(['getItems']),
+    changePage (num) {
+      this.SET_CUR_PAGE(num)
+    },
+    changePageArrow (dif) {
+      if ((this.curPage === 1 && dif === 1) ||
+          (this.curPage === this.itemsOnPage && dif === -1) ||
+          (this.curPage > 1 && this.curPage < this.itemsOnPage)) {
+        this.SET_CUR_PAGE(this.curPage + dif)
+      }
     }
   },
   computed: {
+    ...mapGetters(['paymentsList', 'itemsOnPage', 'curPage']),
     pagesQuantity () {
-      let quant = this.items.length / this.itemsQuantity
+      let quant = this.paymentsList.length / this.itemsOnPage
       if (!Number.isInteger(quant)) quant = Math.trunc(quant) + 1
       return quant
     },
     curItems () {
-      return this.items.slice(
-        this.curPage * this.itemsQuantity - this.itemsQuantity,
-        this.curPage * this.itemsQuantity)
+      return this.paymentsList.slice(
+        this.curPage * this.itemsOnPage - this.itemsOnPage,
+        this.curPage * this.itemsOnPage)
     }
+  },
+  mounted () {
+    this.getItems()
   }
 }
 </script>
