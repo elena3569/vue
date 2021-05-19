@@ -6,7 +6,7 @@
     <main>
       <ButtonAdd @show="onShowForm"/>
       <PaymentForm v-if="show" @add='onDataAdded'/>
-      <PaymentsList :items="paymentsList" />
+      <PaymentsList />
     </main>
   </div>
 </template>
@@ -24,29 +24,7 @@ export default {
   },
   data () {
     return {
-      show: false,
-      paymentsList: [
-        {
-          date: '13.05.2021',
-          category: 'Education',
-          price: 123
-        },
-        {
-          date: '12.05.2021',
-          category: 'Education',
-          price: 456
-        },
-        {
-          date: '11.05.2021',
-          category: 'Education',
-          price: 789
-        },
-        {
-          date: '10.05.2021',
-          category: 'Education',
-          price: 0
-        }
-      ]
+      show: false
     }
   },
   methods: {
