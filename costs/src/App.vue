@@ -8,7 +8,7 @@
       <br>
       <router-link id='link' to='/add/payment/Clothes'> + Clothes</router-link>
       <ButtonAdd @show="onShowForm"/>
-      <PaymentForm @add='onDataAdded'/>
+      <PaymentForm v-show='show' @add='onDataAdded'/>
       <PaymentsList />
     </main>
   </div>
@@ -36,23 +36,20 @@ export default {
   methods: {
     ...mapActions(['getItems']),
     onDataAdded () {
-      // this.show = false
-      console.log('add')
+      this.show = false
     },
     onShowForm () {
       this.show = !this.show
     }
   },
   mounted () {
-    // if (Object.keys(this.$route.params).length !== 0 || Object.keys(this.$route.query).length !== 0) {
-    //   this.show = true
-    // }
+    if (Object.keys(this.$route.params).length !== 0 || Object.keys(this.$route.query).length !== 0) {
+      this.show = true
+    }
     const links = document.querySelectorAll('#link')
     links.forEach(link => link.addEventListener('click', () => {
       this.show = true
       this.onClick = true
-      // console.log(this.$children)
-      // this.$children[PaymentForm].newCost()
     }))
   },
   beforeMount () {
