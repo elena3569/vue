@@ -55,9 +55,6 @@ export default {
         this.curPage * this.itemsOnPage - this.itemsOnPage,
         this.curPage * this.itemsOnPage)
     }
-  },
-  mounted () {
-    this.getItems()
   }
 }
 </script>

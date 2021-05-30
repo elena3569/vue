@@ -48,7 +48,6 @@ export default new Vuex.Store({
             arr = [...arr, ...data[key]]
           }
           commit('SET_ITEMS', arr)
-          // commit('SET_PAGE_QUANTITY', Object.keys(data).length)
         })
         .catch(error => {
           console.log(error)
@@ -72,7 +71,7 @@ export default new Vuex.Store({
     addItem ({ state, commit }, data) {
       const bufItems = [...state.paymentsList]
       const obj = {
-        id: bufItems[bufItems.length - 1].id + 1,
+        id: bufItems.length + 1,
         date: data.date,
         category: data.category,
         value: data.price
