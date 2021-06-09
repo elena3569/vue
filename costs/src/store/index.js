@@ -74,7 +74,7 @@ export default new Vuex.Store({
         id: bufItems.length + 1,
         date: data.date,
         category: data.category,
-        value: data.price
+        value: data.value
       }
       bufItems.push(obj)
       commit('SET_ITEMS', bufItems)

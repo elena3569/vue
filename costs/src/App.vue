@@ -4,11 +4,10 @@
       My personal costs
     </header>
     <main>
-      <router-link id='link' to='/add/payment/Food?value=200'> + Food 200</router-link>
-      <br>
-      <router-link id='link' to='/add/payment/Clothes'> + Clothes</router-link>
-      <ButtonAdd @show="onShowForm"/>
-      <PaymentForm v-show='show' @add='onDataAdded'/>
+      <button class="btn" @click="showModal('PaymentForm')"> + Add new cost</button>
+    <button :class='[$style.btn_add]' @click="showModal('NewCategoryForm')"> + New category </button>
+
+      <Modal />
       <PaymentsList />
     </main>
   </div>
@@ -16,44 +15,51 @@
 
 <script>
 import PaymentsList from './components/PaymentsList'
-import PaymentForm from './components/PaymentForm'
-import ButtonAdd from './components/ButtonAdd'
+import Modal from './components/ModalWindows/Modal'
 import { mapActions } from 'vuex'
 
 export default {
   name: 'App',
   components: {
     PaymentsList,
-    PaymentForm,
-    ButtonAdd
+    Modal
   },
   data () {
     return {
-      show: false,
-      onClick: false
+      param: {
+        date: '',
+        category: '',
+        value: 0
+      }
     }
   },
   methods: {
-    ...mapActions(['getItems']),
-    onDataAdded () {
-      this.show = false
-    },
-    onShowForm () {
-      this.show = !this.show
+    ...mapActions(['getItems', 'getCategories']),
+    showModal (modalName) {
+      this.$modal.show(modalName)
     }
-  },
-  mounted () {
-    if (Object.keys(this.$route.params).length !== 0 || Object.keys(this.$route.query).length !== 0) {
-      this.show = true
-    }
-    const links = document.querySelectorAll('#link')
-    links.forEach(link => link.addEventListener('click', () => {
-      this.show = true
-      this.onClick = true
-    }))
   },
   beforeMount () {
     this.getItems()
+    this.getCategories()
+  },
+  watch: {
+    $route: function () {
+      if (this.$route.params.category || this.$route.query.value) {
+        this.param.date = (new Date()).toISOString().split('T')[0]
+        if (this.$route.params.category) {
+          this.param.category = this.$route.params.category
+        } else {
+          this.param.category = ''
+        }
+        if (this.$route.query.value) {
+          this.param.value = this.$route.query.value
+        } else {
+          this.param.value = 0
+        }
+        this.$modal.change(this.param)
+      }
+    }
   }
 }
 </script>
@@ -61,5 +67,9 @@ export default {
 <style lang="scss" module>
 .header {
   color: red;
+}
+.btn {
+  display: block;
+  margin: 0 10px;
 }
 </style>
