@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
   <div :class="[$style.wrapper]" v-show='name'>
       <div :class="[$style.overlay]"></div>
       <div :class="[$style.content]" >
@@ -10,6 +11,14 @@
           <NewCategoryForm v-show="name === 'NewCategoryForm'" />
         </div>
       </div>
+=======
+  <div :class="[$style.wrapper]">
+      <div :class="[$style.overlay]"></div>
+      <header> {{ name }} </header>
+      <PaymentForm v-if="name === 'PaymentForm'" />
+      <NewCategoryForm v-if="name === 'NewCategoryForm'" />
+      <button @click="onClose">Close</button>
+>>>>>>> les6
   </div>
 </template>
 
@@ -45,6 +54,7 @@ export default {
 }
 </script>
 
+<<<<<<< HEAD
 <style module lang='sass'>
 .wrapper
   position: absolute
@@ -79,4 +89,16 @@ export default {
   &__btn
     color: red
     font-weight: bold
+=======
+<style module>
+.wrapper {
+  border: 1px solid black;
+  position: absolute;
+  background: rgb(162, 162, 255);
+}
+.overlay {
+  color: grey;
+  opacity: 0.5;
+}
+>>>>>>> les6
 </style>

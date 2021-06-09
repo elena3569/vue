@@ -44,6 +44,10 @@ export default {
       this.SET_ITEMS(buf)
     },
     edit ({ settings }) {
+<<<<<<< HEAD
+=======
+      // console.log(item)
+>>>>>>> les6
       this.$modal.show('PaymentForm')
       this.$modal.change(settings)
     }

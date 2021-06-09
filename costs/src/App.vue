@@ -8,6 +8,10 @@
       <button class="btn" @click="showModal('PaymentForm')"> + Add new cost</button>
     <button :class='[$style.btn_add]' @click="showModal('NewCategoryForm')"> + New category </button>
 
+<<<<<<< HEAD
+=======
+      <Modal />
+>>>>>>> les6
       <PaymentsList />
     </main>
   </div>
