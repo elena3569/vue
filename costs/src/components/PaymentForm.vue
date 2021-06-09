@@ -32,7 +32,7 @@ export default {
     return {
       date: '',
       category: '',
-      value: 0
+      value: ''
     }
   },
   computed: {
@@ -51,7 +51,7 @@ export default {
       }
     },
     resetInput () {
-      this.value = 0
+      this.value = ''
       this.category = ''
       this.date = ''
     },
@@ -61,16 +61,15 @@ export default {
       let quant = this.paymentsList.length / this.itemsOnPage
       if (!Number.isInteger(quant)) quant = Math.trunc(quant) + 1
       this.SET_CUR_PAGE(quant)
+      console.log(value)
       this.resetInput()
     },
     upd () {
       const buf = [...this.paymentsList]
-      console.log('buf[0].id - ', buf[0].id)
-      // buf.forEach((item) => console.log(item, item.id === this.id))
-      console.log(buf.indexOf((item) => item.id === this.id))
-      buf[this.id].value = this.value
-      buf[this.id].category = this.category
-      buf[this.id].date = this.date
+      const find = buf.find((item) => item.id === this.id)
+      find.value = this.value
+      find.category = this.category
+      find.date = this.date
       this.SET_ITEMS(buf)
     },
     newCost () {
@@ -79,7 +78,9 @@ export default {
           this.upd()
         } else {
           this.save()
-          this.$router.push({ name: 'MyCosts' })
+          if (this.$route.name !== 'MyCosts') {
+            this.$router.push({ name: 'MyCosts' })
+          }
         }
         this.$modal.close()
       }

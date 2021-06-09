@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <Modal />
     <header class="header">
       My personal costs
     </header>
@@ -7,7 +8,6 @@
       <button class="btn" @click="showModal('PaymentForm')"> + Add new cost</button>
     <button :class='[$style.btn_add]' @click="showModal('NewCategoryForm')"> + New category </button>
 
-      <Modal />
       <PaymentsList />
     </main>
   </div>

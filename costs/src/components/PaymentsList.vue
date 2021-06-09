@@ -44,7 +44,6 @@ export default {
       this.SET_ITEMS(buf)
     },
     edit ({ settings }) {
-      // console.log(item)
       this.$modal.show('PaymentForm')
       this.$modal.change(settings)
     }
