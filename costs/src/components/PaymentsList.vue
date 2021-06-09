@@ -8,53 +8,54 @@
     </div>
     <hr>
      <div :class='[$style.costs__content]' v-for="(item, index) in curItems" :key="index">
-      <div :class='[$style.costs__number]'>{{item.id}}</div>
+      <div :class='[$style.costs__number]'>{{ item.id }}</div>
       <div :class='[$style.costs__date]'> {{ item.date }} </div>
       <div :class='[$style.costs__category]'> {{ item.category }} </div>
       <div :class='[$style.costs__price]'> {{ item.value }} </div>
+      <ConMenu v-bind="{item}"/>
     </div>
-    <div :class="[$style.pagination]">
-      <button @click='changePageArrow(-1)'  :class="[$style.pagination__btn]">&#60;</button>
-      <button @click="changePage(index)"
-          v-for='(index) in pagesQuantity'
-          :key='index'
-          :class="[$style.pagination__btn]"
-      >{{index}}</button>
-      <button @click='changePageArrow(1)' :class="[$style.pagination__btn]">&#62;</button>
-    </div>
+    <pagination />
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import ConMenu from './ContextMenu/ConMenu'
+import pagination from './pagination'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
-  methods: {
-    ...mapMutations(['SET_CUR_PAGE']),
-    ...mapActions(['getItems']),
-    changePage (num) {
-      this.SET_CUR_PAGE(num)
-    },
-    changePageArrow (dif) {
-      if ((this.curPage === 1 && dif === 1) ||
-          (this.curPage === this.itemsOnPage && dif === -1) ||
-          (this.curPage > 1 && this.curPage < this.itemsOnPage)) {
-        this.SET_CUR_PAGE(this.curPage + dif)
-      }
-    }
+  components: {
+    ConMenu,
+    pagination
   },
   computed: {
     ...mapGetters(['paymentsList', 'itemsOnPage', 'curPage']),
-    pagesQuantity () {
-      let quant = this.paymentsList.length / this.itemsOnPage
-      if (!Number.isInteger(quant)) quant = Math.trunc(quant) + 1
-      return quant
-    },
     curItems () {
       return this.paymentsList.slice(
         this.curPage * this.itemsOnPage - this.itemsOnPage,
         this.curPage * this.itemsOnPage)
     }
+  },
+  methods: {
+    ...mapMutations(['SET_ITEMS']),
+    del ({ item }) {
+      const buf = [...this.paymentsList]
+      buf.splice(this.paymentsList.indexOf(item), 1)
+      this.SET_ITEMS(buf)
+    },
+    edit ({ settings }) {
+      // console.log(item)
+      this.$modal.show('PaymentForm')
+      this.$modal.change(settings)
+    }
+  },
+  mounted () {
+    this.$menu.EventBus.$on('del', this.del)
+    this.$menu.EventBus.$on('edit', this.edit)
+  },
+  beforeDestroy () {
+    this.$menu.EventBus.$off('del', this.del)
+    this.$menu.EventBus.$off('edit', this.edit)
   }
 }
 </script>
@@ -69,13 +70,6 @@ export default {
 .titleColumns,
 .costs__content {
   display: grid;
-  grid-template-columns: 30px 100px 150px 60px;
-}
-.pagination {
-  text-align: center;
-  margin-top: 10px;
-}
-.pagination__btn {
-  margin: 0 2px;
+  grid-template-columns: 30px 100px 150px 60px 30px;
 }
 </style>
