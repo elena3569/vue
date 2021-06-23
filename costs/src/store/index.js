@@ -78,6 +78,9 @@ export default new Vuex.Store({
       }
       bufItems.push(obj)
       commit('SET_ITEMS', bufItems)
+    },
+    updItem ({ commit }, data) {
+      commit('SET_ITEMS', data)
     }
   }
 })
