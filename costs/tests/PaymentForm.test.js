@@ -12,12 +12,17 @@ localVue.use(modal)
 describe ('PaymentForm', () => {
     let actions
     let getters
+    let mutations
     let store
 
     const $route = {
         name: 'MyCosts',
         path: '/',
         params: {}
+    }
+
+    const $router = {
+        push: jest.fn()
     }
 
     beforeEach(() => {
@@ -33,9 +38,14 @@ describe ('PaymentForm', () => {
             itemsOnPage: () => 3
         }
 
+        mutations = {
+            SET_CUR_PAGE: jest.fn()
+        }
+
         store = new Vuex.Store({
             actions,
-            getters
+            getters,
+            mutations
         })
     })
     
@@ -44,7 +54,7 @@ describe ('PaymentForm', () => {
             store, 
             localVue, 
             stubs: ['router-link'],
-            mocks: { $route } 
+            mocks: { $route, $router } 
         })
         wrapper.setData({
             date: '26.05.2020',
@@ -60,7 +70,7 @@ describe ('PaymentForm', () => {
             store, 
             localVue, 
             stubs: ['router-link'],
-            mocks: { $route } 
+            mocks: { $route, $router } 
         })
         const settings = {
             id: 1,
@@ -78,7 +88,7 @@ describe ('PaymentForm', () => {
             store, 
             localVue, 
             stubs: ['router-link'],
-            mocks: { $route } 
+            mocks: { $route, $router } 
         })
         const settings = {
           date: '17-06-2021',
@@ -94,26 +104,24 @@ describe ('PaymentForm', () => {
             store, 
             localVue, 
             stubs: ['router-link'],
-            mocks: { $route } 
+            mocks: { $route, $router } 
         })
         const settings = {
-        //   date: '23-06-2021',
+          date: '23-06-2021',
           category: 'Food',
           value: 200
         }
         wrapper.vm.init({settings})
-        // expect(wrapper.vm.date).toEqual('23-06-2021')
-        expect(wrapper.vm.category).toEqual('Food')
-        expect(wrapper.vm.value).toBe(200)
         expect(actions.addItem).toHaveBeenCalled()
 
     })
 
     test('Сбрасывает значения полей', () => {
-        const wrapper = mount(PaymentForm, {
-            stubs: ['router-link'], 
+        const wrapper = mount (PaymentForm, { 
             store, 
-            localVue 
+            localVue, 
+            stubs: ['router-link'],
+            mocks: { $route, $router } 
         })
         wrapper.setData({
           date: '26.05.2020',
