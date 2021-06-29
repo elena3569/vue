@@ -25,6 +25,7 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'PaymentForm',
+  props: ['CurItem'],
   data () {
     return {
       id: '',

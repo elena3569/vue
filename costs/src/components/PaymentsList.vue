@@ -1,32 +1,50 @@
 <template>
-  <div :class='[$style.costs]'>
-    <div :class="[$style.titleColumns]">
-      <div>№</div>
-      <div>Date</div>
-      <div>Category</div>
-      <div>Value</div>
-    </div>
-    <hr>
-     <div :class='[$style.costs__content]' v-for="(item, index) in curItems" :key="index">
-      <div :class='[$style.costs__number]'>{{ item.id }}</div>
-      <div :class='[$style.costs__date]'> {{ item.date }} </div>
-      <div :class='[$style.costs__category]'> {{ item.category }} </div>
-      <div :class='[$style.costs__price]'> {{ item.value }} </div>
-      <ConMenu v-bind="{item}"/>
-    </div>
-    <pagination />
+  <div>
+    <v-data-table
+      :headers='headers'
+      :items='paymentsList'
+    >
+      <template v-slot:body='{ items }'>
+        <tbody>
+          <tr v-for='item in items' :key='item.name'>
+            <td>{{ item.id }}</td>
+            <td>{{ item.date }}</td>
+            <td>{{ item.category }}</td>
+            <td>{{ item.value }}</td>
+            <td>
+              <v-menu open-on-hover top offset-y>
+                <template v-slot:activator='{ on }'>
+                  <v-btn v-on='on'>
+                    <v-icon>mdi-dots-vertical</v-icon>
+                  </v-btn>
+                </template>
+
+                <v-list>
+                    <v-btn @click="del(item)"> Delete </v-btn>
+                    <v-btn @click="edit(item)"> Edit </v-btn>
+                </v-list>
+              </v-menu>
+            </td>
+          </tr>
+        </tbody>
+      </template>
+    </v-data-table>
   </div>
 </template>
 
 <script>
-import ConMenu from './ContextMenu/ConMenu'
-import pagination from './pagination'
 import { mapGetters, mapMutations } from 'vuex'
 
 export default {
-  components: {
-    ConMenu,
-    pagination
+  data () {
+    return {
+      headers: [
+        { text: '#', value: 'id' },
+        { text: 'Date', value: 'date' },
+        { text: 'Category', value: 'category' },
+        { text: 'Value', value: 'value' }
+      ]
+    }
   },
   computed: {
     ...mapGetters(['paymentsList', 'itemsOnPage', 'curPage']),
@@ -38,23 +56,16 @@ export default {
   },
   methods: {
     ...mapMutations(['SET_ITEMS']),
-    del ({ item }) {
+    del (item) {
       const buf = [...this.paymentsList]
       buf.splice(this.paymentsList.indexOf(item), 1)
       this.SET_ITEMS(buf)
     },
-    edit ({ settings }) {
-      this.$modal.show('PaymentForm')
-      this.$modal.change(settings)
+    edit (item) {
+      // this.$modal.show('PaymentForm')
+      // this.$modal.change(item)
+      this.$emit('change-item', item)
     }
-  },
-  mounted () {
-    this.$menu.EventBus.$on('del', this.del)
-    this.$menu.EventBus.$on('edit', this.edit)
-  },
-  beforeDestroy () {
-    this.$menu.EventBus.$off('del', this.del)
-    this.$menu.EventBus.$off('edit', this.edit)
   }
 }
 </script>
