@@ -12,16 +12,20 @@
             <td>{{ item.category }}</td>
             <td>{{ item.value }}</td>
             <td>
-              <v-menu open-on-hover top offset-y>
+              <v-menu open-on-hover offset-x>
                 <template v-slot:activator='{ on }'>
-                  <v-btn v-on='on'>
+                  <v-btn small text v-on='on'>
                     <v-icon>mdi-dots-vertical</v-icon>
                   </v-btn>
                 </template>
 
-                <v-list>
-                    <v-btn @click="del(item)"> Delete </v-btn>
-                    <v-btn @click="edit(item)"> Edit </v-btn>
+                <v-list class='py-0'>
+                  <v-list-item class='py-0 px-2 ma-0'>
+                      <v-btn class='pa-0 ma-0' small text @click="del(item)"> Delete </v-btn>
+                  </v-list-item>
+                  <v-list-item class='py-0 px-2 ma-0'>
+                      <v-btn class='pa-0 ma-0' small text @click="edit(item)"> Edit </v-btn>
+                  </v-list-item>
                 </v-list>
               </v-menu>
             </td>
@@ -42,17 +46,13 @@ export default {
         { text: '#', value: 'id' },
         { text: 'Date', value: 'date' },
         { text: 'Category', value: 'category' },
-        { text: 'Value', value: 'value' }
+        { text: 'Value', value: 'value' },
+        { text: '' }
       ]
     }
   },
   computed: {
-    ...mapGetters(['paymentsList', 'itemsOnPage', 'curPage']),
-    curItems () {
-      return this.paymentsList.slice(
-        this.curPage * this.itemsOnPage - this.itemsOnPage,
-        this.curPage * this.itemsOnPage)
-    }
+    ...mapGetters(['paymentsList'])
   },
   methods: {
     ...mapMutations(['SET_ITEMS']),
@@ -62,9 +62,9 @@ export default {
       this.SET_ITEMS(buf)
     },
     edit (item) {
-      // this.$modal.show('PaymentForm')
-      // this.$modal.change(item)
-      this.$emit('change-item', item)
+      const id = item.id
+      this.$router.push({ name: 'EditCost', params: { id } })
+      this.$emit('change-item')
     }
   }
 }

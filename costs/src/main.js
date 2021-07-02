@@ -4,10 +4,10 @@ import vuetify from './pluguins/vuetify'
 
 import store from './store'
 import router from './router'
-import modal from './plugins/ModalWindows'
+// import modal from './plugins/ModalWindows'
 
 Vue.config.productionTip = false
-Vue.use(modal)
+// Vue.use(modal)
 
 new Vue({
   render: h => h(App),

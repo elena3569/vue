@@ -15,6 +15,11 @@ export default new Router({
       path: '/add/payment/:category',
       name: 'NewCost',
       component: () => import('../views/dashboard.vue')
+    },
+    {
+      path: '/edit/payment/:id',
+      name: 'EditCost',
+      component: () => import('../views/dashboard.vue')
     }
   ]
 })

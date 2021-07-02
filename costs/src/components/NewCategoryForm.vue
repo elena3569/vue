@@ -1,8 +1,15 @@
 <template>
   <div>
-      <input type="text" v-model="category">
-      <button @click="add">Add</button>
-      <div> {{message}} </div>
+    <v-container>
+      <v-card-text>
+        <v-row>
+          <v-text-field label='Category' v-model="category"></v-text-field>
+        </v-row>
+      </v-card-text>
+    </v-container>
+    <v-card-actions>
+      <v-btn class="text-center" @click="add" color='teal' text>Add</v-btn>
+    </v-card-actions>
   </div>
 </template>
 
@@ -24,8 +31,7 @@ export default {
     add () {
       if (this.category) {
         this.addCategory(this.category)
-        this.message = 'Категория добавлена'
-        this.category = ''
+        this.$emit('save-category')
       }
     }
   }

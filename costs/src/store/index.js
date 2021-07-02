@@ -6,36 +6,22 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     paymentsList: [],
-    categories: [],
-    curPage: 1,
-    itemsOnPage: 3
+    categories: []
   },
   getters: {
-    itemsOnPage (state) {
-      return state.itemsOnPage
-    },
     paymentsList (state) {
       return state.paymentsList
     },
     categories (state) {
       return state.categories
-    },
-    curPage (state) {
-      return state.curPage
     }
   },
   mutations: {
-    SET_CUR_PAGE (state, data) {
-      state.curPage = data
-    },
     SET_ITEMS (state, data) {
       state.paymentsList = data
     },
     SET_CATEGORIES (state, data) {
       state.categories = data
-    },
-    SET_PAGE_QUANTITY (state, data) {
-      state.pageQuantity = data
     }
   },
   actions: {
