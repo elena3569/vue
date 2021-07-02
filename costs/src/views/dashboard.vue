@@ -46,7 +46,7 @@
         <PaymentsList @change-item='showFormPayment = true'/>
       </v-col>
       <v-col col='4'>
-        <canvas ref="canvas"></canvas>
+        <!-- <canvas ref="canvas"></canvas> -->
         <!-- <line-chart :chartdata="chartData" :options="chartOptions"/> -->
         <!-- <Chart v-bind:chartdata='{ labels, datasets }'/> -->
       </v-col>
@@ -60,7 +60,7 @@ import PaymentForm from '../components/PaymentForm'
 import NewCategoryForm from '../components/NewCategoryForm'
 // import LineChart from '../components/Chart.vue'
 import { mapActions, mapGetters } from 'vuex'
-import { Pie } from 'vue-chartjs'
+// import { Pie } from 'vue-chartjs'
 
 export default {
   name: 'App',
@@ -115,10 +115,10 @@ export default {
   beforeMount () {
     this.getItems()
     this.getCategories()
-  },
-  mounted () {
-    this.renderChart(this.chartdata, this.options)
   }
+  // mounted () {
+  //   this.renderChart(this.chartdata, this.options)
+  // }
 }
 </script>
 
