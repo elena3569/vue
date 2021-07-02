@@ -46,9 +46,7 @@
         <PaymentsList @change-item='showFormPayment = true'/>
       </v-col>
       <v-col col='4'>
-        <!-- <canvas ref="canvas"></canvas> -->
-        <!-- <line-chart :chartdata="chartData" :options="chartOptions"/> -->
-        <!-- <Chart v-bind:chartdata='{ labels, datasets }'/> -->
+        <PieChart />
       </v-col>
     </v-row>
   </div>
@@ -58,18 +56,16 @@
 import PaymentsList from '../components/PaymentsList'
 import PaymentForm from '../components/PaymentForm'
 import NewCategoryForm from '../components/NewCategoryForm'
-// import LineChart from '../components/Chart.vue'
-import { mapActions, mapGetters } from 'vuex'
-// import { Pie } from 'vue-chartjs'
+import PieChart from '../components/Chart'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'App',
-  extends: Pie,
   components: {
     PaymentsList,
     PaymentForm,
-    NewCategoryForm
-    // LineChart
+    NewCategoryForm,
+    PieChart
   },
   data () {
     return {
@@ -80,34 +76,11 @@ export default {
       },
       showFormPayment: false,
       showFormCategory: false,
-      options: {
+      chartOptions: {
         responsive: true,
         maintainAspectRatio: false
       }
     }
-  },
-  computed: {
-    ...mapGetters(['categories', 'paymentsList']),
-    chartdata () {
-      return {
-        labels: this.categories,
-        datasets: this.paymentsList.map(function (item) {
-          return {
-            label: item.date,
-            data: item.value
-          }
-        })
-      }
-    }
-    // datasets () {
-    //   const data = this.paymentsList.map(function (item) {
-    //     return {
-    //       label: item.date,
-    //       data: item.value
-    //     }
-    //   })
-    //   return data
-    // }
   },
   methods: {
     ...mapActions(['getItems', 'getCategories'])
@@ -116,18 +89,5 @@ export default {
     this.getItems()
     this.getCategories()
   }
-  // mounted () {
-  //   this.renderChart(this.chartdata, this.options)
-  // }
 }
 </script>
-
-<style lang="scss" module>
-.header {
-  color: red;
-}
-.btn {
-  display: block;
-  margin: 0 10px;
-}
-</style>

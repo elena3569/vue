@@ -14,7 +14,7 @@
             <router-link
             :to='{ name: "NewCost",
             params: { category: "Clothes" } }'
-            class="font-weight-bold text-decoration-none blue--text text--lighten-1"> <v-icon > mdi-plus </v-icon> Food 200</router-link>
+            class="font-weight-bold text-decoration-none blue--text text--lighten-1"> <v-icon > mdi-plus </v-icon> Clothes</router-link>
           </v-btn>
         </v-row>
         <v-row class='mt-8 mb-4'>
