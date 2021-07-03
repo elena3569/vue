@@ -2,22 +2,31 @@
   <div>
       <input type="text" v-model="category">
       <button @click="add">Add</button>
+      <div> {{message}} </div>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   data () {
     return {
-      category: ''
+      category: '',
+      message: ''
     }
+  },
+  computed: {
+    ...mapGetters(['categories'])
   },
   methods: {
     ...mapActions(['addCategory']),
     add () {
-      this.addCategory(this.category)
+      if (this.category) {
+        this.addCategory(this.category)
+        this.message = 'Категория добавлена'
+        this.category = ''
+      }
     }
   }
 }
