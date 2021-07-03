@@ -1,60 +1,71 @@
 <template>
-  <div :class='[$style.costs]'>
-    <div :class="[$style.titleColumns]">
-      <div>№</div>
-      <div>Date</div>
-      <div>Category</div>
-      <div>Value</div>
-    </div>
-    <hr>
-     <div :class='[$style.costs__content]' v-for="(item, index) in curItems" :key="index">
-      <div :class='[$style.costs__number]'>{{ item.id }}</div>
-      <div :class='[$style.costs__date]'> {{ item.date }} </div>
-      <div :class='[$style.costs__category]'> {{ item.category }} </div>
-      <div :class='[$style.costs__price]'> {{ item.value }} </div>
-      <ConMenu v-bind="{item}"/>
-    </div>
-    <pagination />
+  <div>
+    <v-data-table
+      :headers='headers'
+      :items='paymentsList'
+    >
+      <template v-slot:body='{ items }'>
+        <tbody>
+          <tr v-for='item in items' :key='item.name'>
+            <td>{{ item.id }}</td>
+            <td>{{ item.date }}</td>
+            <td>{{ item.category }}</td>
+            <td>{{ item.value }}</td>
+            <td>
+              <v-menu open-on-hover offset-x>
+                <template v-slot:activator='{ on }'>
+                  <v-btn small text v-on='on'>
+                    <v-icon>mdi-dots-vertical</v-icon>
+                  </v-btn>
+                </template>
+
+                <v-list class='py-0'>
+                  <v-list-item class='py-0 px-2 ma-0'>
+                      <v-btn class='pa-0 ma-0' small text @click="del(item)"> Delete </v-btn>
+                  </v-list-item>
+                  <v-list-item class='py-0 px-2 ma-0'>
+                      <v-btn class='pa-0 ma-0' small text @click="edit(item)"> Edit </v-btn>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </td>
+          </tr>
+        </tbody>
+      </template>
+    </v-data-table>
   </div>
 </template>
 
 <script>
-import ConMenu from './ContextMenu/ConMenu'
-import pagination from './pagination'
 import { mapGetters, mapMutations } from 'vuex'
 
 export default {
-  components: {
-    ConMenu,
-    pagination
+  data () {
+    return {
+      headers: [
+        { text: '#', value: 'id' },
+        { text: 'Date', value: 'date' },
+        { text: 'Category', value: 'category' },
+        { text: 'Value', value: 'value' },
+        { text: '' }
+      ]
+    }
   },
   computed: {
-    ...mapGetters(['paymentsList', 'itemsOnPage', 'curPage']),
-    curItems () {
-      return this.paymentsList.slice(
-        this.curPage * this.itemsOnPage - this.itemsOnPage,
-        this.curPage * this.itemsOnPage)
-    }
+    ...mapGetters(['paymentsList'])
   },
   methods: {
     ...mapMutations(['SET_ITEMS']),
-    del ({ item }) {
+    del (item) {
       const buf = [...this.paymentsList]
       buf.splice(this.paymentsList.indexOf(item), 1)
       this.SET_ITEMS(buf)
     },
-    edit ({ settings }) {
-      this.$modal.show('PaymentForm')
-      this.$modal.change(settings)
+    edit (item) {
+      const id = item.id
+      this.$router.push({ name: 'EditCost', params: { id } })
+      this.$emit('change-item')
     }
-  },
-  mounted () {
-    this.$menu.EventBus.$on('del', this.del)
-    this.$menu.EventBus.$on('edit', this.edit)
-  },
-  beforeDestroy () {
-    this.$menu.EventBus.$off('del', this.del)
-    this.$menu.EventBus.$off('edit', this.edit)
   }
 }
 </script>
